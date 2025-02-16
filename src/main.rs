@@ -2,6 +2,10 @@
 mod simulation;
 
 use simulation::world::World;
+use simulation::colony::Colony;
+
+
+
 
 
 
@@ -13,10 +17,8 @@ fn main() {
 
 
     let mut world = World::new(WIDTH, HEIGHT);
-
-    let cell = world.get_cell(4, 4);
-
-    println!("{:?}", cell);
+    
+    
 
 
 

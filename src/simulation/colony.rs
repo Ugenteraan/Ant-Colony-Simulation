@@ -19,5 +19,5 @@ pub impl Colony {
 
 	}
 
-	
+	// fn produce_ants()
 }
