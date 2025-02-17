@@ -1,4 +1,5 @@
 use glam::Vec2;
+use std::sync::atomic::{AtomicU32, Ordering};
 
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -21,6 +22,8 @@ pub struct Ant {
 
 
 
+
+
 pub impl Ant {
 
 	pub fn new(id: u32, initial_position: Vec2, initial_moving_direction: Vec2, 
@@ -38,6 +41,8 @@ pub impl Ant {
 			direction_to_colony: -1*initial_moving_direction
 		}
 	}
+
+
 
     pub fn get_ant_position(&self) -> &Vec2 {
 
