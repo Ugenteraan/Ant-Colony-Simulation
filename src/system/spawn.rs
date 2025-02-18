@@ -1,6 +1,5 @@
 use bevy::prelude::*;
-// use bevy::ui::{Style, PositionType, Val}; // ✅ Import required UI structs
-use bevy::ui::widget::ImageNode; // ✅ Required for UI images
+use bevy::ui::widget::ImageNode; 
 
 use crate::simulation::world::{World, Cell};
 use glam::Vec2;
