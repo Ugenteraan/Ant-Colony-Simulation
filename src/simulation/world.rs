@@ -54,7 +54,7 @@ impl World {
 	}	
 
 	// pub fn set_cell(&self, position:Vec2, cell: Cell) -> () {
-
+		
 	// }
 
 
