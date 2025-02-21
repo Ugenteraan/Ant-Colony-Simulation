@@ -1,26 +1,23 @@
 
 //import crates.
 use glam::Vec2;
-use std::sync::atomic::{AtomicU32, Ordering};
 // use ant::Ant;
 
-
+#[derive(Debug)]
 pub struct Colony {
-	ant_id_counter: AtomicU32,
-	position: Vec2,
-	food_in_store: u32,
+	pub position: Vec2,
+	pub food_in_colony: u32,
 }
 
 
 impl Colony {
 
 
-	fn new(x: f32, y: f32, default_food_in_store: u32, initial_ant_id_counter: AtomicU32) -> Self {
+	pub fn new(x: f32, y: f32, default_food_in_colony: u32) -> Self {
 
 		Colony {
-			ant_id_counter: initial_ant_id_counter,
 			position: Vec2::new(x, y),
-			food_in_store: default_food_in_store,
+			food_in_colony: default_food_in_colony,
 		}
 
 	}

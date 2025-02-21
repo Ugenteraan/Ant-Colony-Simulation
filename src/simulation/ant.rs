@@ -1,13 +1,15 @@
 use glam::Vec2;
 use std::sync::atomic::{AtomicU32, Ordering};
+use bevy::prelude::*;
 
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Component, Debug, Clone, Copy, PartialEq, Eq)]
 enum AntMode {
 	Exploring,
 	Returning,
 }
 
+#[derive(Debug, Clone, Copy, Component)]
 pub struct Ant {
 	id: u32,
 	position: Vec2,
@@ -24,7 +26,7 @@ pub struct Ant {
 
 
 
-pub impl Ant {
+impl Ant {
 
 	pub fn new(id: u32, initial_position: Vec2, initial_moving_direction: Vec2, 
 			initial_energy: f32, lifespan: u32) -> Self {
@@ -38,7 +40,7 @@ pub impl Ant {
 			carrying_food: false,
 			mode: AntMode::Exploring,
 			is_alive: true,
-			direction_to_colony: -1*initial_moving_direction
+			direction_to_colony: -1.0*initial_moving_direction
 		}
 	}
 
@@ -46,21 +48,21 @@ pub impl Ant {
 
     pub fn get_ant_position(&self) -> &Vec2 {
 
-    	return self.position;
+    	return &self.position;
 
     }
 
-    pub fn set_ant_position(&mut self, new_position: Vec2) -> () {
+    // pub fn set_ant_position(&mut self, new_position: Vec2) -> () {
 
-    	self.position = new_position;
-    	//calculate the direction to colony and set the direction to colony here.
-    	return;
-    }
+    // 	self.position = new_position;
+    // 	//calculate the direction to colony and set the direction to colony here.
+    // 	return;
+    // }
 
-    pub fn set_ant_direction(&mut self, new_direction: Vec2) -> () {
+    // pub fn set_ant_direction(&mut self, new_direction: Vec2) -> () {
 
-    	self.moving_direction = new_direction;
-    }
+    // 	self.moving_direction = new_direction;
+    // }
 
 	
 }
