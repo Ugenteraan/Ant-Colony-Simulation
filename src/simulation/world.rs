@@ -43,7 +43,6 @@ impl World {
 		};
 
 		//mark the grid as the colony grid after converting the Vec2 to x and y position.
-		
 		world.grid[colony_x][colony_y] = Cell::Colony;
 
 		return world;
