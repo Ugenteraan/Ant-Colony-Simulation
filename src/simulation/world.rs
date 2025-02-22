@@ -32,7 +32,7 @@ impl World {
 
 		
 		let colony = Colony::new(colony_position.x, colony_position.y, default_food_in_colony);
-		let (colony_x, colony_y) = utils::world_to_grid(&colony.position, cell_size);
+		let (colony_x, colony_y) = utils::world_to_grid(colony.position, cell_size);
 
 		let mut world = World {
 			height: height,
@@ -44,24 +44,19 @@ impl World {
 
 		//mark the grid as the colony grid after converting the Vec2 to x and y position.
 		world.grid[colony_x][colony_y] = Cell::Colony;
-
 		return world;
 
 	}
 
 
+	fn get_cell(&self, position: Vec2) -> Cell {
+
+		let (x, y) = utils::world_to_grid(position, self.cell_size);
+		self.grid[x][y]
+
+	}	
 
 
-	// fn get_cell(&self, position: Vec2) -> Cell {
-
-	// 	let (x, y) = utils::world_to_grid(position, self.cell_size);
-	// 	self.grid[x][y]
-
-	// }	
-
-	// pub fn set_cell(&self, position:Vec2, cell: Cell) -> () {
-		
-	// }
 
 
 

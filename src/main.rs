@@ -14,11 +14,12 @@ use gui::app;
 
 fn main() -> Result<(), eframe::Error> {
 
-    const HEIGHT: usize = 60;
-    const WIDTH: usize = 60;
-    const CELL_SIZE: f32 = 10.0;
+    const HEIGHT: usize = 100;
+    const WIDTH: usize = 100;
+    const CELL_SIZE: f32 = 50.0;
     const COLONY_POSITION: Vec2 = Vec2::new((WIDTH / 2) as f32, (HEIGHT / 2) as f32);
     const DEFAULT_FOOD_IN_COLONY: u32 = 10;
+
 
     let world = World::new(WIDTH, HEIGHT, CELL_SIZE, COLONY_POSITION, DEFAULT_FOOD_IN_COLONY);
 

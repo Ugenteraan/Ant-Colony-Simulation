@@ -12,7 +12,7 @@ enum AntMode {
 #[derive(Debug, Clone, Copy)]
 pub struct Ant {
 	id: u32,
-	position: Vec2,
+	pub position: Vec2,
 	moving_direction: Vec2,
 	energy: f32,
 	lifespan: u32,
@@ -50,6 +50,11 @@ impl Ant {
 
     	return &self.position;
 
+    }
+
+    pub fn move_ant(&mut self) -> () {
+
+    	self.position += self.moving_direction*0.1;
     }
 
     // pub fn set_ant_position(&mut self, new_position: Vec2) -> () {

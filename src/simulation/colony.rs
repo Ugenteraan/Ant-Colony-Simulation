@@ -37,7 +37,7 @@ impl Colony {
 
 	}
 
-	fn insert_ant(&mut self, position: Vec2, moving_direction: Vec2, energy: f32, lifespan: u32){
+	pub fn insert_ant(&mut self, position: Vec2, moving_direction: Vec2, energy: f32, lifespan: u32){
 
 		//generate a new id for the ant.
 		let new_id: u32 = self.ant_id_counter.fetch_add(1, Ordering::Relaxed);
