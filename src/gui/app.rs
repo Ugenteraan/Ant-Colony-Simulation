@@ -22,7 +22,6 @@ impl eframe::App for MyApp {
 		egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Ant Colony Simulation");
 
-
             renderer::draw_world(ui, &self.world);
 		});
 
