@@ -3,9 +3,9 @@ use crate::simulation::{ant, colony};
 use ant::Ant;
 use colony::Colony;
 use crate::utils;
-use bevy::prelude::Resource;
+use eframe::egui;
 use std::collections::VecDeque;
-use glam::Vec2;
+use eframe::egui::Vec2;
 use std::sync::atomic::{AtomicU32, Ordering};
 
 
@@ -18,7 +18,7 @@ pub enum Cell {
 	Food,
 }
 
-#[derive(Resource, Debug)]
+#[derive(Debug)]
 pub struct World {
 	pub height: usize,
 	pub width: usize,
@@ -49,14 +49,14 @@ impl World {
 		};
 
 		//mark the grid as the colony grid after converting the Vec2 to x and y position.
-		let (colony_x, colony_y) = utils::vec2_to_grid_index(colony_position, width, height, cell_size);
+		let (colony_x, colony_y) = utils::world_to_grid(colony.position, cell_size);
 		world.grid[colony_x][colony_y] = Cell::Colony;
 
 		return world;
 
 	}
 
-	pub fn insert_ant(&mut self, position: Vec2, moving_direction: Vec2, energy: f32, lifespan: u32){
+	fn insert_ant(&mut self, position: Vec2, moving_direction: Vec2, energy: f32, lifespan: u32){
 
 		//generate a new id for the ant.
 		let new_id: u32 = self.ant_id_counter.fetch_add(1, Ordering::Relaxed);
@@ -68,12 +68,12 @@ impl World {
 	}
 
 
-	pub fn get_cell(&self, position: Vec2) -> Cell {
+	// fn get_cell(&self, position: Vec2) -> Cell {
 
-		let (x, y) = utils::vec2_to_grid_index(position, self.width, self.height, self.cell_size);
-		self.grid[x][y]
+	// 	let (x, y) = utils::world_to_grid(position, self.cell_size);
+	// 	self.grid[x][y]
 
-	}	
+	// }	
 
 	// pub fn set_cell(&self, position:Vec2, cell: Cell) -> () {
 		

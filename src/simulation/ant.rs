@@ -1,15 +1,15 @@
-use glam::Vec2;
+use eframe::egui::Vec2;
 use std::sync::atomic::{AtomicU32, Ordering};
-use bevy::prelude::*;
 
 
-#[derive(Component, Debug, Clone, Copy, PartialEq, Eq)]
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum AntMode {
 	Exploring,
 	Returning,
 }
 
-#[derive(Debug, Clone, Copy, Component)]
+#[derive(Debug, Clone, Copy)]
 pub struct Ant {
 	id: u32,
 	position: Vec2,

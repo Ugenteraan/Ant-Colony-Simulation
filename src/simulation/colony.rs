@@ -1,9 +1,8 @@
 
 //import crates.
-use glam::Vec2;
-// use ant::Ant;
+use eframe::egui::Vec2;
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Colony {
 	pub position: Vec2,
 	pub food_in_colony: u32,
