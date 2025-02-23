@@ -11,18 +11,20 @@ use eframe::egui::Vec2;
 pub struct System {
 	pub ant_energy: f32,
 	pub ant_lifespan: u32,
-	pub ant_speed: f32
+	pub ant_speed: f32,
+	pub ant_turn_rate: f32
 }
 
 
 impl System {
 
-	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32) -> Self {
+	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32, ant_turn_rate: f32) -> Self {
 
 		System {
 			ant_energy: ant_energy,
 			ant_lifespan: ant_lifespan,
-			ant_speed: ant_speed
+			ant_speed: ant_speed,
+			ant_turn_rate: ant_turn_rate
 		}
 
 	}
@@ -49,10 +51,10 @@ impl System {
 
  			
 
- 			world.set_cell(world.colony.ants[i].position, Cell::Empty); //mark the current one empty before marking the other as filled with ant.
+ 			// world.set_cell(world.colony.ants[i].position, Cell::Empty); //mark the current one empty before marking the other as filled with ant.
 
  			let ant: &mut Ant = &mut world.colony.ants[i];
- 			ant.move_ant(&world.height, &world.width);
+ 			ant.move_ant(&world.height, &world.width, self.ant_turn_rate);
 
  			// world.set_cell(world.colony.ants[i].position, Cell::Ant); //mark the cell after the move with ant.
  		}

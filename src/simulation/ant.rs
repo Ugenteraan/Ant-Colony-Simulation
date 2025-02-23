@@ -56,12 +56,12 @@ impl Ant {
 
     }
 
-    pub fn move_ant(&mut self, world_height: &usize, world_width: &usize) -> () {
+    pub fn move_ant(&mut self, world_height: &usize, world_width: &usize, ant_turn_rate: f32) -> () {
 
     	let mut rng = rand::rng();
 
     	// generate a random direction every once in a while.
-        if rng.random::<f64>() < 0.005 {
+        if rng.random::<f32>() < ant_turn_rate {
         	let direction = utils::change_direction(false); //this will gen a direction within 90 degrees.
         	self.moving_direction = direction;
         }
@@ -72,38 +72,14 @@ impl Ant {
         //check for the border of the screen.
     	let (mut x, mut y) = utils::world_to_grid(self.position);
 
+    	//NOTE: IMPORTANT!
+    	//instead of assigning a totally new direction vector, we have to rotate the current direction vector!!!!!
     	while x >= *world_width - 1 || y >= *world_height - 1 || x <= 0 || y <= 0 {
     		self.moving_direction = utils::change_direction(true);
     		self.position += self.moving_direction*self.speed;
 
     		(x, y) = utils::world_to_grid(self.position);
     	}	
-
-    	// let mut counter: u32 = 0;
-        // while x >= *world_width - 2 || x <= 2  || y >= *world_height - 2 || y <= 2  {
-    	// 	let direction = utils::change_direction(true);
-    	// 	self.moving_direction = direction;
-    	// 	self.position += self.moving_direction*self.speed;
-
-    	// 	(x, y) = utils::world_to_grid(self.position); //update the x and y back.
-
-    	// 	//if more than 5 attempts at random direction is already made.
-    	// 	if counter > 10 {
-    	// 		self.moving_direction = self.direction_to_colony;
-    	// 		self.position += self.moving_direction*self.speed;
-    	// 		(x, y) = utils::world_to_grid(self.position); //update the x and y back.
-    	// 		break;
-    	// 	}
-
-    	// 	counter += 1;
-    	// }
-
-    	
-
-    	
-
-
-
 
     }
 

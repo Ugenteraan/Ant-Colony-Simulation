@@ -2,7 +2,7 @@
 use crate::simulation::colony;
 use colony::Colony;
 use crate::utils;
-use eframe::egui;use eframe::egui::Vec2;
+use eframe::egui::Vec2;
 
 
 #[derive(Debug, Clone, Copy)]

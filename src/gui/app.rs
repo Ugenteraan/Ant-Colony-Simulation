@@ -1,15 +1,15 @@
 use crate::simulation::{world::World, system::System};
 use crate::gui::renderer;
 use eframe::egui;
-use image::io::Reader as ImageReader;
+use image::ImageReader as ImageReader;
 use std::io::Cursor;
 use std::time::{Instant, Duration};
 
 
 const ANT_ENERGY: f32 = 50.0;
 const ANT_LIFESPAN: u32 = 500;
-const ANT_SPEED: f32 = 0.1;
-
+const ANT_SPEED: f32 = 0.5;
+const ANT_TURN_RATE: f32 = 0.005;
 
 pub struct MyApp {
     world: World,
@@ -22,7 +22,7 @@ pub struct MyApp {
 impl MyApp {
     pub fn new(world: World) -> Self {
 
-    	let system = System::new(ANT_ENERGY, ANT_LIFESPAN, ANT_SPEED); //initialize the system that governs the simulation.
+    	let system = System::new(ANT_ENERGY, ANT_LIFESPAN, ANT_SPEED, ANT_TURN_RATE); //initialize the system that governs the simulation.
 
         Self {
             world: world,
@@ -90,6 +90,7 @@ impl eframe::App for MyApp {
 		let now = Instant::now();
         let elapsed = now - self.last_update;
 
+
         ctx.request_repaint(); //repaint the GUI at every call.
 		self.load_colony_texture(ctx);
 		self.load_ant_texture(ctx);
@@ -101,12 +102,13 @@ impl eframe::App for MyApp {
 
 			let (response, painter) = ui.allocate_painter(available_size, egui::Sense::hover());
 
+			renderer::draw_world(ui, &self.world, &self.colony_texture, &self.ant_texture, &available_size, &painter);
+
 			//update the world at interval to avoid system crash.
-			if elapsed > Duration::from_millis(200) { 
-            
-	            renderer::draw_world(ui, &self.world, &self.colony_texture, &self.ant_texture, &available_size, &painter);
+			if elapsed > Duration::from_millis(32) { 
 
 	            self.system.update_world(&mut self.world); //update the simulation's system.
+	            self.last_update = now;
         	}
             
 		});
