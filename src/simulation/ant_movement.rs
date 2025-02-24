@@ -1,6 +1,7 @@
-//Module to dictate the movement of the ants.
+
+use crate::utils::change_direction;
 
 
-
-
-pub fn move_ant()
+pub fn move_ant() {
+	
+}

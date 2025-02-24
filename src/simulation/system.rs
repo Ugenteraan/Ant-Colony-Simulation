@@ -55,13 +55,7 @@ impl System {
  			world.set_cell(world.colony.ants[i].position, Cell::Empty); //mark the current one empty before marking the other as filled with ant.
 
  			let ant: &mut Ant = &mut world.colony.ants[i];
- 			ant.move_ant(&world.height, &world.width, self.ant_turn_rate, false);
-
- 			let moved_cell = world.get_cell(ant.position);
-
- 			match moved_cell {
- 				Cell::Ant => {ant.move_ant(&world.height, &world.width, self.ant_turn_rate, true);}
- 			}
+ 			ant.move_ant(&world.height, &world.width, self.ant_turn_rate);
 
  			world.set_cell(world.colony.ants[i].position, Cell::Ant); //mark the cell after the move with ant.
  		}

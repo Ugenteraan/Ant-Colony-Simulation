@@ -56,7 +56,7 @@ impl Ant {
 
     }
 
-    pub fn move_ant(&mut self, world_height: &usize, world_width: &usize, ant_turn_rate: f32, blocked: bool) -> () {
+    pub fn move_ant(&mut self, world_height: &usize, world_width: &usize, ant_turn_rate: f32) -> () {
 
     	if blocked {
     		let direction = utils::change_direction(); //this will gen a direction within 90 degrees.
