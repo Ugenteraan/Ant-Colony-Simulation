@@ -37,12 +37,12 @@ impl Colony {
 
 	}
 
-	pub fn insert_ant(&mut self, position: Vec2, moving_direction: Vec2, moving_speed: f32, energy: f32, lifespan: u32){
+	pub fn insert_ant(&mut self, position: Vec2, moving_direction: Vec2, ant_turn_probability: f32, moving_speed: f32, energy: f32, lifespan: u32){
 
 		//generate a new id for the ant.
 		let new_id: u32 = self.ant_id_counter.fetch_add(1, Ordering::Relaxed);
 
-		let ant: Ant = Ant::new(new_id, position, moving_direction, moving_speed, energy, lifespan);
+		let ant: Ant = Ant::new(new_id, position, moving_direction, ant_turn_probability, moving_speed, energy, lifespan);
 
 		self.ants.push_back(ant);
 

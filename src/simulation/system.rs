@@ -3,7 +3,7 @@
 use crate::simulation::world::{World, Cell};
 use crate::simulation::ant::Ant;
 use crate::utils::{gen_rand_direction};
-use ant_movement;
+use crate::simulation::ant_movement::move_ant;
 use eframe::egui::Vec2;
 
 
@@ -13,19 +13,19 @@ pub struct System {
 	pub ant_energy: f32,
 	pub ant_lifespan: u32,
 	pub ant_speed: f32,
-	pub ant_turn_rate: f32
+	pub ant_turn_probability: f32
 }
 
 
 impl System {
 
-	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32, ant_turn_rate: f32) -> Self {
+	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32, ant_turn_probability: f32) -> Self {
 
 		System {
 			ant_energy: ant_energy,
 			ant_lifespan: ant_lifespan,
 			ant_speed: ant_speed,
-			ant_turn_rate: ant_turn_rate
+			ant_turn_probability: ant_turn_probability
 		}
 
 	}
@@ -43,7 +43,7 @@ impl System {
  				let direction: Vec2 = gen_rand_direction();
  				let position: Vec2 = world.colony.position + direction;
 
- 				world.colony.insert_ant(position, direction, self.ant_speed, self.ant_energy, self.ant_lifespan);
+ 				world.colony.insert_ant(position, direction, self.ant_turn_probability, self.ant_speed, self.ant_energy, self.ant_lifespan);
 
  			}
  		}
@@ -55,7 +55,7 @@ impl System {
  			world.set_cell(world.colony.ants[i].position, Cell::Empty); //mark the current one empty before marking the other as filled with ant.
 
  			let ant: &mut Ant = &mut world.colony.ants[i];
- 			ant.move_ant(&world.height, &world.width, self.ant_turn_rate);
+ 			move_ant(ant, &world.width, &world.height);
 
  			world.set_cell(world.colony.ants[i].position, Cell::Ant); //mark the cell after the move with ant.
  		}

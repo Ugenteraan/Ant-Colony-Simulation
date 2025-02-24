@@ -9,7 +9,7 @@ use std::time::{Instant, Duration};
 const ANT_ENERGY: f32 = 50.0;
 const ANT_LIFESPAN: u32 = 500;
 const ANT_SPEED: f32 = 0.3;
-const ANT_TURN_RATE: f32 = 0.01;
+const ANT_TURN_PROBABILITY: f32 = 0.01;
 
 pub struct MyApp {
     world: World,
@@ -22,7 +22,7 @@ pub struct MyApp {
 impl MyApp {
     pub fn new(world: World) -> Self {
 
-    	let system = System::new(ANT_ENERGY, ANT_LIFESPAN, ANT_SPEED, ANT_TURN_RATE); //initialize the system that governs the simulation.
+    	let system = System::new(ANT_ENERGY, ANT_LIFESPAN, ANT_SPEED, ANT_TURN_PROBABILITY); //initialize the system that governs the simulation.
 
         Self {
             world: world,
