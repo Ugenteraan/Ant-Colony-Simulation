@@ -3,6 +3,7 @@
 use crate::simulation::world::{World, Cell};
 use crate::simulation::ant::Ant;
 use crate::utils::{gen_rand_direction};
+use ant_movement;
 use eframe::egui::Vec2;
 
 
@@ -51,12 +52,18 @@ impl System {
 
  			
 
- 			// world.set_cell(world.colony.ants[i].position, Cell::Empty); //mark the current one empty before marking the other as filled with ant.
+ 			world.set_cell(world.colony.ants[i].position, Cell::Empty); //mark the current one empty before marking the other as filled with ant.
 
  			let ant: &mut Ant = &mut world.colony.ants[i];
- 			ant.move_ant(&world.height, &world.width, self.ant_turn_rate);
+ 			ant.move_ant(&world.height, &world.width, self.ant_turn_rate, false);
 
- 			// world.set_cell(world.colony.ants[i].position, Cell::Ant); //mark the cell after the move with ant.
+ 			let moved_cell = world.get_cell(ant.position);
+
+ 			match moved_cell {
+ 				Cell::Ant => {ant.move_ant(&world.height, &world.width, self.ant_turn_rate, true);}
+ 			}
+
+ 			world.set_cell(world.colony.ants[i].position, Cell::Ant); //mark the cell after the move with ant.
  		}
 
  		// let ant_count = world.grid.iter().flatten().filter(|&&cell| matches!(cell, Cell::Ant)).count();

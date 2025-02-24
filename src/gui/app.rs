@@ -8,8 +8,8 @@ use std::time::{Instant, Duration};
 
 const ANT_ENERGY: f32 = 50.0;
 const ANT_LIFESPAN: u32 = 500;
-const ANT_SPEED: f32 = 0.5;
-const ANT_TURN_RATE: f32 = 0.005;
+const ANT_SPEED: f32 = 0.3;
+const ANT_TURN_RATE: f32 = 0.01;
 
 pub struct MyApp {
     world: World,

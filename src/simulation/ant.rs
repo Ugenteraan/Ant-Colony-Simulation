@@ -56,30 +56,39 @@ impl Ant {
 
     }
 
-    pub fn move_ant(&mut self, world_height: &usize, world_width: &usize, ant_turn_rate: f32) -> () {
+    pub fn move_ant(&mut self, world_height: &usize, world_width: &usize, ant_turn_rate: f32, blocked: bool) -> () {
+
+    	if blocked {
+    		let direction = utils::change_direction(); //this will gen a direction within 90 degrees.
+        	self.moving_direction = direction;
+    	}
 
     	let mut rng = rand::rng();
 
     	// generate a random direction every once in a while.
         if rng.random::<f32>() < ant_turn_rate {
-        	let direction = utils::change_direction(false); //this will gen a direction within 90 degrees.
-        	self.moving_direction = direction;
-        }
 
+        	let direction = utils::change_direction(); //this will gen a direction within 90 degrees.
+        	self.moving_direction = direction;
+
+        }
 
         self.position += self.moving_direction*self.speed;
 
-        //check for the border of the screen.
-    	let (mut x, mut y) = utils::world_to_grid(self.position);
+        let (mut x, mut y) = utils::world_to_grid(self.position);
 
+        //check for the border of the screen.
     	//NOTE: IMPORTANT!
     	//instead of assigning a totally new direction vector, we have to rotate the current direction vector!!!!!
-    	while x >= *world_width - 1 || y >= *world_height - 1 || x <= 0 || y <= 0 {
-    		self.moving_direction = utils::change_direction(true);
+    	if x >= *world_width - 1 || y >= *world_height - 1 || x <= 0 || y <= 0 {
+
+    		self.moving_direction = -1.0 * self.moving_direction; //reverse the direction.
     		self.position += self.moving_direction*self.speed;
 
     		(x, y) = utils::world_to_grid(self.position);
     	}	
+
+
 
     }
 
