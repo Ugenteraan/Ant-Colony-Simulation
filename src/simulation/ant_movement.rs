@@ -1,50 +1,102 @@
 
 use crate::utils;
-use crate::simulation::{world::World, ant::Ant};
+use crate::simulation::{world::World, world::Cell, ant::Ant};
 
 use eframe::egui::Vec2;
 use rand::Rng;
 
-pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize) {
+
+
+fn apply_new_direction(ant: &mut Ant, border: bool, blocked: bool) -> Vec2 {
+
+	let (cos_angle, sin_angle) = utils::change_direction(border, blocked); //this will gen a direction within 90 degrees
+    	
+	let current_x = ant.moving_direction.x;
+	let current_y = ant.moving_direction.y;
+
+	let new_x = current_x * cos_angle + (current_y * -1.0*sin_angle);
+	let new_y = current_x * sin_angle + current_y * cos_angle;
+
+	return Vec2::new(new_x, new_y);
+
+}
+
+
+pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) -> () {
 
 	let mut rng = rand::rng();
 
 	// generate a random direction every once in a while.
     if rng.random::<f32>() < ant.turn_probability {
 
-    	let (cos_angle, sin_angle) = utils::change_direction(false); //this will gen a direction within 90 degrees
-    	
-    	let current_x = ant.moving_direction.x;
-    	let current_y = ant.moving_direction.y;
-
-    	let new_x = current_x * cos_angle + (current_y * -1.0*sin_angle);
-    	let new_y = current_x * sin_angle + current_y * cos_angle;
-
-    	ant.moving_direction = Vec2::new(new_x, new_y);
-
+    	ant.moving_direction = apply_new_direction(ant, false, false);
     }
 
-    ant.position += ant.moving_direction*ant.speed;
+    let mut new_position = ant.position + ant.moving_direction*ant.speed; //update the ant's new position either with the random direction above or the current direction.
 
-    let (mut x, mut y) = utils::world_to_grid(ant.position);
+    
+    let (mut x, mut y) = utils::world_to_grid(new_position); //get the x and y of the current grid now after the above update.
 
-    //check for the border of the screen.
-	//NOTE: IMPORTANT!
-	//instead of assigning a totally new direction vector, we have to rotate the current direction vector!!!!!
+    //if the ants are very nearby to the colony, then skip all the logics below.
+    let vector_to_colony = *colony_position - ant.position;
+    let distance_to_colony = vector_to_colony.length();
+    
+    if distance_to_colony > -8.0 && distance_to_colony < 8.0 {
+    	ant.position += ant.moving_direction*ant.speed; //update the position.
+    	return;
+    }
+
+    //check for the borders of the screen.
 	if x >= world_width - 1 || y >= world_height - 1 || x <= 0 || y <= 0 {
 
-		let (cos_angle, sin_angle) = utils::change_direction(true);
+    	ant.moving_direction = apply_new_direction(ant, true, false);
 
-		let current_x = ant.moving_direction.x;
-    	let current_y = ant.moving_direction.y;
+    	
+    	new_position = ant.moving_direction*ant.speed; //update the new position if this if block is executed.
+    	(x, y) = utils::world_to_grid(ant.position); //update x and y
 
-    	let new_x = current_x * cos_angle + (current_y * -1.0*sin_angle);
-    	let new_y = current_x * sin_angle + current_y * cos_angle;
+	}
 
-    	ant.moving_direction = Vec2::new(new_x, new_y);
-		ant.position += ant.moving_direction*ant.speed;
+	let mut blocked_counter = 1;
 
-		(x, y) = utils::world_to_grid(ant.position);
-	}	
+	//we check if the current grip that the ant moved is valid or not in this loop
+	loop {
+
+		let current_grid = world_grids[x][y];
+		match current_grid {
+			Cell::Ant => {
+				ant.moving_direction = apply_new_direction(ant, true, true);
+				new_position = ant.position + ant.moving_direction*ant.speed;
+				(x, y) = utils::world_to_grid(new_position);
+				blocked_counter += 1;
+			},
+			_ => {break;}
+		}
+
+		if blocked_counter >= 7 {
+
+			return; //no need to update the ant's position if we can't get a solution to this blocked grid.
+		}
+	}
+	ant.position += ant.moving_direction*ant.speed; //finally update the position.
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

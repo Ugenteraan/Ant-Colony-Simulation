@@ -2,7 +2,7 @@
 
 use crate::simulation::world::{World, Cell};
 use crate::simulation::ant::Ant;
-use crate::utils::{gen_rand_direction};
+use crate::utils::{gen_rand_direction, world_to_grid};
 use crate::simulation::ant_movement::move_ant;
 use eframe::egui::Vec2;
 
@@ -50,12 +50,24 @@ impl System {
 
  		for i in 0..world.colony.ants.len() {
 
+ 			//mark the current ant-filled cell empty before marking the other as filled with ant.
+ 			//we want to avoid marking other cell such as food or pheromone 
+ 			let (x, y) = world_to_grid(world.colony.ants[i].position);
+
+ 			match world.grid[x][y] {
+ 				Cell::Ant => {
+ 					world.set_cell(world.colony.ants[i].position, Cell::Empty); 
+ 				},
+ 				// Cell::Ant_Pheromone => {
+ 				// 	world.set_cell(world.colony.ants[i].position, Cell::Pheromone); 
+ 				// }
+ 				_ => {}
+
+ 			}
  			
 
- 			world.set_cell(world.colony.ants[i].position, Cell::Empty); //mark the current one empty before marking the other as filled with ant.
-
  			let ant: &mut Ant = &mut world.colony.ants[i];
- 			move_ant(ant, &world.width, &world.height);
+ 			move_ant(ant, &world.width, &world.height, &world.grid, &world.colony.position);
 
  			world.set_cell(world.colony.ants[i].position, Cell::Ant); //mark the cell after the move with ant.
  		}

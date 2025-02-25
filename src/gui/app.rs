@@ -8,8 +8,8 @@ use std::time::{Instant, Duration};
 
 const ANT_ENERGY: f32 = 50.0;
 const ANT_LIFESPAN: u32 = 500;
-const ANT_SPEED: f32 = 0.3;
-const ANT_TURN_PROBABILITY: f32 = 0.01;
+const ANT_SPEED: f32 = 0.1;
+const ANT_TURN_PROBABILITY: f32 = 0.02;
 
 pub struct MyApp {
     world: World,
@@ -105,7 +105,7 @@ impl eframe::App for MyApp {
 			renderer::draw_world(ui, &self.world, &self.colony_texture, &self.ant_texture, &available_size, &painter);
 
 			//update the world at interval to avoid system crash.
-			if elapsed > Duration::from_millis(32) { 
+			if elapsed > Duration::from_millis(16) { 
 
 	            self.system.update_world(&mut self.world); //update the simulation's system.
 	            self.last_update = now;

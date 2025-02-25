@@ -5,13 +5,14 @@ use crate::utils;
 use eframe::egui::Vec2;
 
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Cell {
 	Empty,
 	Ant,
 	Pheromone(u8),
 	Colony,
 	Food,
+	Ant_Pheromone(u8), //cells can contain ant and pheromone.
 }
 
 #[derive(Debug)]
