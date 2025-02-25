@@ -17,11 +17,19 @@ pub fn gen_rand_direction() -> Vec2 {
 }
 
 //changing currently moving ants.
-pub fn change_direction() -> Vec2 {
+pub fn change_direction(border: bool) -> (f32, f32) {
+
+    //if it's a border collision, then changethe direction to a value between 150 degrees to 210 degrees.
+    if border {
+        let angle: f32 = rand::rng().random_range(2.61799..3.66519) as f32;
+        return (angle.cos(), angle.sin());
+    }
 
     
-    //the angle would not be more than 90 degrees.
-    let angle: f32 = rand::rng().random_range(0.0..std::f64::consts::PI/2.0) as f32;
-    return Vec2::new(angle.cos(), angle.sin());
+    //the angle generated is in between -90 degrees to 90 degrees.
+    let angle: f32 = rand::rng().random_range(-1.0*std::f64::consts::PI/2.0..std::f64::consts::PI/2.0) as f32;
+    return (angle.cos(), angle.sin());
+
+
     
 }
