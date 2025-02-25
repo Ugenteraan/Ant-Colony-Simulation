@@ -43,8 +43,8 @@ fn draw_colony(ui: &mut egui::Ui, world: &World, colony_texture: &Option<egui::T
 fn draw_ant(ui: &mut egui::Ui, world: &World, ant_texture: &Option<egui::TextureHandle>, available_size: &egui::Vec2, painter: &egui::Painter) -> () {
 
 
-	let ant_icon_size_x = available_size.x / 40.0;
-	let ant_icon_size_y = available_size.y / 40.0;
+	let ant_icon_size_x = available_size.x / 60.0;
+	let ant_icon_size_y = available_size.y / 60.0;
 
 
 	for ant in world.colony.ants.iter() {

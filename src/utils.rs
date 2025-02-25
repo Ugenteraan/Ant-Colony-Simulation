@@ -9,6 +9,7 @@ pub fn world_to_grid(position: Vec2) -> (usize, usize) {
     (x, y)
 }
 
+
 //when spawning the ants.
 pub fn gen_rand_direction() -> Vec2 {
 

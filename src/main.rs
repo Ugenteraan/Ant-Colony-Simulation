@@ -17,7 +17,7 @@ fn main() -> Result<(), eframe::Error> {
     const HEIGHT: usize = 100;
     const WIDTH: usize = 100;
     const COLONY_POSITION: Vec2 = Vec2::new((WIDTH / 2) as f32, (HEIGHT / 2) as f32);
-    const DEFAULT_FOOD_IN_COLONY: u32 = 10;
+    const DEFAULT_FOOD_IN_COLONY: u32 = 100;
 
 
     let world = World::new(WIDTH, HEIGHT, COLONY_POSITION, DEFAULT_FOOD_IN_COLONY);

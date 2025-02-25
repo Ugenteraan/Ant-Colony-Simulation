@@ -10,10 +10,11 @@ use eframe::egui::Vec2;
 
 
 pub struct System {
-	pub ant_energy: f32,
-	pub ant_lifespan: u32,
-	pub ant_speed: f32,
-	pub ant_turn_probability: f32
+	ant_energy: f32,
+	ant_lifespan: u32,
+	ant_speed: f32,
+	ant_turn_probability: f32,
+	food_spawn_rate: f32,
 }
 
 
@@ -47,6 +48,12 @@ impl System {
 
  			}
  		}
+
+ 		//randomly spawn foods.
+		if rng.random::<f32>() < self.food_spawn_rate {
+
+	    	ant.moving_direction = apply_new_direction(ant, false, false);
+	    }
 
  		for i in 0..world.colony.ants.len() {
 
