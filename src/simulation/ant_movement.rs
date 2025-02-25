@@ -38,10 +38,11 @@ pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_
     let (mut x, mut y) = utils::world_to_grid(new_position); //get the x and y of the current grid now after the above update.
 
     //if the ants are very nearby to the colony, then skip all the logics below.
-    let vector_to_colony = *colony_position - ant.position;
-    let distance_to_colony = vector_to_colony.length();
+    //we don't want collision detection nearby colony, else the spawning part will be stuck.
+    let ant_to_colony_vector = *colony_position - ant.position;
+    let distance_to_colony = ant_to_colony_vector.length(); //length of the vector a.k.a distance.
     
-    if distance_to_colony > -8.0 && distance_to_colony < 8.0 {
+    if distance_to_colony > -1.0 && distance_to_colony < 1.0 {
     	ant.position += ant.moving_direction*ant.speed; //update the position.
     	return;
     }
@@ -73,7 +74,7 @@ pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_
 			_ => {break;}
 		}
 
-		if blocked_counter >= 7 {
+		if blocked_counter >= 7 { //we pick 7 since we turn 45 degrees everytime and 7 x 45 = 315 degrees. Right before one more turn to come back where we started.
 
 			return; //no need to update the ant's position if we can't get a solution to this blocked grid.
 		}
