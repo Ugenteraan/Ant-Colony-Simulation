@@ -1,8 +1,8 @@
 
-use crate::simulation::colony;
-use colony::Colony;
+use crate::simulation::{colony::Colony, food::Food};
 use crate::utils;
 use eframe::egui::Vec2;
+use std::collections::VecDeque;
 
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -21,7 +21,7 @@ pub struct World {
 	pub width: usize,
 	pub grid: Vec<Vec<Cell>>,
 	pub colony: Colony, //code the whole colony to be spawned here tomorrow.
-
+	pub foods: VecDeque<Food>
 }
 
 
@@ -38,7 +38,8 @@ impl World {
 			height: height,
 			width: width,
 			grid: vec![vec![Cell::Empty; width]; height],
-			colony: colony
+			colony: colony,
+			foods: VecDeque::new()
 		};
 
 		//mark the grid as the colony grid after converting the Vec2 to x and y position.
@@ -62,8 +63,21 @@ impl World {
 		self.grid[x][y] = cell;
 	}
 
+	pub fn spawn_food(&mut self, food: Food) -> () {
 
-
+		self.set_cell(food.position, Cell::Food);
+		self.foods.push_back(food);
+	}
 
 
 }
+
+
+
+
+
+
+
+
+
+

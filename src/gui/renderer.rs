@@ -4,10 +4,11 @@ use crate::simulation::world::World;
 
 
 
-pub fn draw_world(ui: &mut egui::Ui, world: &World, colony_texture: &Option<egui::TextureHandle>, ant_texture: &Option<egui::TextureHandle>, available_size: &egui::Vec2, painter: &egui::Painter) -> () {
+pub fn draw_world(ui: &mut egui::Ui, world: &World, colony_texture: &Option<egui::TextureHandle>, ant_texture: &Option<egui::TextureHandle>, food_texture: &Option<egui::TextureHandle>, available_size: &egui::Vec2, painter: &egui::Painter) -> () {
 
 	draw_colony(ui, world, colony_texture, available_size, painter);
 	draw_ant(ui, world, ant_texture, available_size, painter);
+	draw_food(ui, world, food_texture, available_size, painter);
 	
 	
 }
@@ -68,6 +69,33 @@ fn draw_ant(ui: &mut egui::Ui, world: &World, ant_texture: &Option<egui::Texture
 			painter.circle_filled(ui_pos, 5.0, egui::Color32::from_rgb(255, 255, 255));
 		}
 	}
+}
+
+
+fn draw_food(ui: &mut egui::Ui, world: &World, food_texture: &Option<egui::TextureHandle>, available_size: &egui::Vec2, painter: &egui::Painter) -> () {
+
+	let food_icon_size_x = available_size.x / 50.0;
+	let food_icon_size_y = available_size.y / 50.0;
+
+	for food in world.foods.iter() {
+
+		let ui_x = food.position.x * (available_size.x/world.width as f32);
+		let ui_y = food.position.y * (available_size.y/world.height as f32);
+
+		let ui_pos = egui::Pos2::new(ui_x, ui_y);
+
+		if let Some(texture) = food_texture {
+			ui.put(
+				egui::Rect::from_min_size(ui_pos, egui::Vec2::new(food_icon_size_x, food_icon_size_y)),
+				egui::Image::new(texture)
+					.fit_to_exact_size(egui::Vec2::new(food_icon_size_x, food_icon_size_y)),
+			);
+		} else{
+			painter.circle_filled(ui_pos, 5.0, egui::Color32::from_rgb(255, 0, 255));
+		}
+	}
+
+
 }
 
 

@@ -1,11 +1,11 @@
 //Simulation logics.
 
 use crate::simulation::world::{World, Cell};
-use crate::simulation::ant::Ant;
+use crate::simulation::{ant::Ant, food::Food};
 use crate::utils::{gen_rand_direction, world_to_grid};
 use crate::simulation::ant_movement::move_ant;
 use eframe::egui::Vec2;
-
+use rand::Rng;
 
 
 
@@ -20,13 +20,14 @@ pub struct System {
 
 impl System {
 
-	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32, ant_turn_probability: f32) -> Self {
+	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32, ant_turn_probability: f32, food_spawn_rate: f32) -> Self {
 
 		System {
 			ant_energy: ant_energy,
 			ant_lifespan: ant_lifespan,
 			ant_speed: ant_speed,
-			ant_turn_probability: ant_turn_probability
+			ant_turn_probability: ant_turn_probability,
+			food_spawn_rate: food_spawn_rate
 		}
 
 	}
@@ -50,9 +51,19 @@ impl System {
  		}
 
  		//randomly spawn foods.
-		if rng.random::<f32>() < self.food_spawn_rate {
+		if rand::rng().random::<f32>() < self.food_spawn_rate {
 
-	    	ant.moving_direction = apply_new_direction(ant, false, false);
+			let food = Food::new(&world.grid, &world.width, &world.height);
+
+	    	match food {
+	    		Some(food) => {
+
+	    			world.spawn_food(food);
+
+	    		},
+	    		None => {}
+	    	}
+
 	    }
 
  		for i in 0..world.colony.ants.len() {

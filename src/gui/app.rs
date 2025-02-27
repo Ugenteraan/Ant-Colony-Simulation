@@ -10,25 +10,28 @@ const ANT_ENERGY: f32 = 50.0;
 const ANT_LIFESPAN: u32 = 500;
 const ANT_SPEED: f32 = 0.1;
 const ANT_TURN_PROBABILITY: f32 = 0.02;
+const FOOD_SPAWN_RATE: f32 = 0.001;
 
 pub struct MyApp {
     world: World,
     system: System,
     colony_texture: Option<egui::TextureHandle>,
     ant_texture: Option<egui::TextureHandle>,
+    food_texture: Option<egui::TextureHandle>,
     last_update: Instant,
 }
 
 impl MyApp {
     pub fn new(world: World) -> Self {
 
-    	let system = System::new(ANT_ENERGY, ANT_LIFESPAN, ANT_SPEED, ANT_TURN_PROBABILITY); //initialize the system that governs the simulation.
+    	let system = System::new(ANT_ENERGY, ANT_LIFESPAN, ANT_SPEED, ANT_TURN_PROBABILITY, FOOD_SPAWN_RATE); //initialize the system that governs the simulation.
 
         Self {
             world: world,
             system: system,
             colony_texture: None,
             ant_texture: None,
+            food_texture: None,
             last_update: Instant::now()
         }
     }
@@ -81,6 +84,30 @@ impl MyApp {
 
 
 
+    pub fn load_food_texture(&mut self, ctx: &egui::Context) {
+
+        if self.food_texture.is_none() {
+            let image_data = include_bytes!("../../assets/food.png"); 
+            let image = ImageReader::new(Cursor::new(image_data))
+                .with_guessed_format()
+                .expect("Failed to read image!")
+                .decode()
+                .expect("Failed to decode image!")
+                .to_rgba8();
+
+            let (w, h) = image.dimensions();
+            let pixels = image.into_raw();
+
+            self.food_texture = Some(ctx.load_texture(
+                "food_icon",
+                egui::ColorImage::from_rgba_unmultiplied([w as _, h as _,], &pixels),
+                egui::TextureOptions::default(),
+            ));
+        }
+    }
+
+
+
 }
 
 impl eframe::App for MyApp {
@@ -94,6 +121,7 @@ impl eframe::App for MyApp {
         ctx.request_repaint(); //repaint the GUI at every call.
 		self.load_colony_texture(ctx);
 		self.load_ant_texture(ctx);
+        self.load_food_texture(ctx);
 
 		egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Ant Colony Simulation");
@@ -102,7 +130,7 @@ impl eframe::App for MyApp {
 
 			let (response, painter) = ui.allocate_painter(available_size, egui::Sense::hover());
 
-			renderer::draw_world(ui, &self.world, &self.colony_texture, &self.ant_texture, &available_size, &painter);
+			renderer::draw_world(ui, &self.world, &self.colony_texture, &self.ant_texture, &self.food_texture, &available_size, &painter);
 
 			//update the world at interval to avoid system crash.
 			if elapsed > Duration::from_millis(16) { 
