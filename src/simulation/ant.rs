@@ -5,7 +5,7 @@ use crate::utils;
 
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum AntMode {
+pub enum AntMode {
 	Exploring,
 	Returning,
 }
@@ -22,8 +22,8 @@ pub struct Ant {
 	pub carrying_food: bool,
 	pub mode: AntMode,
 	pub is_alive: bool,
-	pub direction_to_colony: Vec2,
-
+	pub strong_pheromone_intensity: f32, //max pheromone intensity that an ant can produce.
+	pub weak_pheromone_intensity: f32
 }
 
 
@@ -32,7 +32,7 @@ pub struct Ant {
 
 impl Ant {
 
-	pub fn new(id: u32, initial_position: Vec2, initial_moving_direction: Vec2, turn_probability: f32, speed: f32, initial_energy: f32, lifespan: u32) -> Self {
+	pub fn new(id: u32, initial_position: Vec2, initial_moving_direction: Vec2, turn_probability: f32, speed: f32, initial_energy: f32, lifespan: u32, strong_pheromone_intensity: f32, weak_pheromone_intensity: f32) -> Self {
 
 		Ant {
 			id: id,
@@ -45,7 +45,8 @@ impl Ant {
 			carrying_food: false,
 			mode: AntMode::Exploring,
 			is_alive: true,
-			direction_to_colony: -1.0*initial_moving_direction
+			strong_pheromone_intensity: strong_pheromone_intensity,
+			weak_pheromone_intensity: weak_pheromone_intensity
 		}
 	}
 

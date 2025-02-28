@@ -34,7 +34,6 @@ impl Food {
 
 			match world_grids[x][y] {
 				Cell::Empty => {break;},
-				Cell::Pheromone(_) => {break;},
 				_ => {
 
 					//generate a new random position.

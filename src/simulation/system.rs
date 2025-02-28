@@ -1,7 +1,7 @@
 //Simulation logics.
 
 use crate::simulation::world::{World, Cell};
-use crate::simulation::{ant::Ant, food::Food};
+use crate::simulation::{ant::{Ant, AntMode}, food::Food, pheromone::Pheromone};
 use crate::utils::{gen_rand_direction, world_to_grid};
 use crate::simulation::ant_movement::move_ant;
 use eframe::egui::Vec2;
@@ -15,21 +15,24 @@ pub struct System {
 	ant_speed: f32,
 	ant_turn_probability: f32,
 	food_spawn_rate: f32,
+	ant_weak_pheromone_intensity: f32,
+	ant_strong_pheromone_intensity: f32
 }
 
 
 impl System {
 
-	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32, ant_turn_probability: f32, food_spawn_rate: f32) -> Self {
+	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32, ant_turn_probability: f32, food_spawn_rate: f32, ant_weak_pheromone_intensity: f32, ant_strong_pheromone_intensity: f32) -> Self {
 
-		System {
-			ant_energy: ant_energy,
-			ant_lifespan: ant_lifespan,
-			ant_speed: ant_speed,
-			ant_turn_probability: ant_turn_probability,
-			food_spawn_rate: food_spawn_rate
-		}
-
+			System {
+				ant_energy: ant_energy,
+				ant_lifespan: ant_lifespan,
+				ant_speed: ant_speed,
+				ant_turn_probability: ant_turn_probability,
+				food_spawn_rate: food_spawn_rate,
+				ant_weak_pheromone_intensity: ant_weak_pheromone_intensity,
+				ant_strong_pheromone_intensity: ant_strong_pheromone_intensity
+			}
 	}
 
 	pub fn update_world(&mut self, world: &mut World) -> () {
@@ -45,7 +48,7 @@ impl System {
  				let direction: Vec2 = gen_rand_direction();
  				let position: Vec2 = world.colony.position + direction;
 
- 				world.colony.insert_ant(position, direction, self.ant_turn_probability, self.ant_speed, self.ant_energy, self.ant_lifespan);
+ 				world.colony.insert_ant(position, direction, self.ant_turn_probability, self.ant_speed, self.ant_energy, self.ant_lifespan, self.ant_weak_pheromone_intensity, self.ant_strong_pheromone_intensity);
 
  			}
  		}
@@ -76,6 +79,9 @@ impl System {
  				Cell::Ant => {
  					world.set_cell(world.colony.ants[i].position, Cell::Empty); 
  				},
+ 				Cell::Food => {
+ 					world.colony.ants[i].mode = AntMode::Returning;
+ 				}
  				// Cell::Ant_Pheromone => {
  				// 	world.set_cell(world.colony.ants[i].position, Cell::Pheromone); 
  				// }
@@ -84,15 +90,19 @@ impl System {
  			}
  			
 
- 			let ant: &mut Ant = &mut world.colony.ants[i];
- 			move_ant(ant, &world.width, &world.height, &world.grid, &world.colony.position);
+ 			if let Some(ant) = world.colony.ants.get_mut(i) {
+ 				move_ant(ant, &world.width, &world.height, &world.grid, &world.colony.position);
 
- 			world.set_cell(world.colony.ants[i].position, Cell::Ant); //mark the cell after the move with ant.
+ 				let ant_position = ant.position;
+ 				world.set_cell(ant_position, Cell::Ant); //mark the cell after the move with ant.
+ 			}
+
+ 			
+ 			world.set_pheromone(&i); //set pheromone of the ant.
+
+
  		}
-
- 		// let ant_count = world.grid.iter().flatten().filter(|&&cell| matches!(cell, Cell::Ant)).count();
- 		
-
+ 	
 
 	}
 }

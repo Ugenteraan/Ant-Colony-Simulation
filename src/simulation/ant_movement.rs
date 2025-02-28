@@ -1,6 +1,6 @@
 
 use crate::utils;
-use crate::simulation::{world::World, world::Cell, ant::Ant};
+use crate::simulation::{world::World, world::Cell, ant::{Ant, AntMode}};
 
 use eframe::egui::Vec2;
 use rand::Rng;
@@ -22,7 +22,7 @@ fn apply_new_direction(ant: &mut Ant, border: bool, blocked: bool) -> Vec2 {
 }
 
 
-pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) -> () {
+fn wandering_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) {
 
 	let mut rng = rand::rng();
 
@@ -80,6 +80,29 @@ pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_
 		}
 	}
 	ant.position += ant.moving_direction*ant.speed; //finally update the position.
+}
+
+
+// fn returning_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) {
+
+
+// }
+
+
+
+pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) -> () {
+
+
+	let ant_mode = ant.mode;
+
+	match ant_mode {
+
+		AntMode::Exploring => { wandering_ant(ant, world_width, world_height, world_grids, colony_position); },
+		AntMode::Returning => { }
+
+	}
+
+	
 
 }
 

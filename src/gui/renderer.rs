@@ -6,8 +6,9 @@ use crate::simulation::world::World;
 
 pub fn draw_world(ui: &mut egui::Ui, world: &World, colony_texture: &Option<egui::TextureHandle>, ant_texture: &Option<egui::TextureHandle>, food_texture: &Option<egui::TextureHandle>, available_size: &egui::Vec2, painter: &egui::Painter) -> () {
 
-	draw_colony(ui, world, colony_texture, available_size, painter);
+	
 	draw_ant(ui, world, ant_texture, available_size, painter);
+	draw_colony(ui, world, colony_texture, available_size, painter);
 	draw_food(ui, world, food_texture, available_size, painter);
 	
 	
