@@ -16,13 +16,15 @@ pub struct System {
 	ant_turn_probability: f32,
 	food_spawn_rate: f32,
 	ant_weak_pheromone_intensity: f32,
-	ant_strong_pheromone_intensity: f32
+	ant_strong_pheromone_intensity: f32,
+	pheromone_decay_rate: f32
+
 }
 
 
 impl System {
 
-	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32, ant_turn_probability: f32, food_spawn_rate: f32, ant_weak_pheromone_intensity: f32, ant_strong_pheromone_intensity: f32) -> Self {
+	pub fn new(ant_energy: f32, ant_lifespan: u32, ant_speed: f32, ant_turn_probability: f32, food_spawn_rate: f32, ant_weak_pheromone_intensity: f32, ant_strong_pheromone_intensity: f32, pheromone_decay_rate: f32) -> Self {
 
 			System {
 				ant_energy: ant_energy,
@@ -31,7 +33,8 @@ impl System {
 				ant_turn_probability: ant_turn_probability,
 				food_spawn_rate: food_spawn_rate,
 				ant_weak_pheromone_intensity: ant_weak_pheromone_intensity,
-				ant_strong_pheromone_intensity: ant_strong_pheromone_intensity
+				ant_strong_pheromone_intensity: ant_strong_pheromone_intensity,
+				pheromone_decay_rate: pheromone_decay_rate
 			}
 	}
 
@@ -99,7 +102,7 @@ impl System {
 
  			
  			world.set_pheromone(&i); //set pheromone of the ant.
-
+ 			world.update_pheromones(self.pheromone_decay_rate);
 
  		}
  	
