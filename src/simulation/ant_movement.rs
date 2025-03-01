@@ -1,6 +1,10 @@
 
 use crate::utils;
-use crate::simulation::{world::World, world::Cell, ant::{Ant, AntMode}};
+use crate::simulation::world::{World, Cell, Vec2Key};
+use crate::simulation::ant::{Ant, AntMode};
+use crate::simulation::pheromone::Pheromone;
+use std::collections::HashMap;
+
 
 use eframe::egui::Vec2;
 use rand::Rng;
@@ -83,26 +87,37 @@ fn wandering_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world
 }
 
 
-fn returning_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) {
-
-	//There could be 2 reasons why an ant is returning back.
-	//1) Found food.
-	//2) Energy almost depleted.
-	//Both follows the strongest pheromone back home. But the 2nd case doesn't drop any pheromone.
-
-	//Following pheromone got a few challenges and things to look out for.
-	//1) When following the strongest pheromone, the ants should know at least the last 2 followed pheromones so it doesn't get stuck following the same one.
-	//2) Even when following the pheromones, there should be a probability rate where the ant would veer off the path.
-
-	
 
 
+// fn returning_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2, pheromones: &HashMap<Vec2Key, Pheromone>) {
 
-}
+// 	//There could be 2 reasons why an ant is returning back.
+// 	//1) Found food.
+// 	//2) Energy almost depleted.
+// 	//Both follows the strongest pheromone back home. But the 2nd case doesn't drop any pheromone.
+
+// 	//Following pheromone got a few challenges and things to look out for.
+// 	//1) When following the strongest pheromone, the ants should know at least the last 2 followed pheromones so it doesn't get stuck following the same one.
+// 	//2) Even when following the pheromones, there should be a probability rate where the ant would veer off the path.
+
+// 	//1st step - find pheromones nearby. Iterate through all the pheromones and calc the distance.
+// 	//2nd step - Filter the ones within range and exclude the visited pheromones.
+// 	//3rd step - Pick the strongest one.
+// 	//4th step - update the ant's movement to that pheromone.
+// 	//5th step - update the visited pheromone array.
+// 	//6th step - if it's the 1st reason, drop pheromone, else do nothing.
+// 	//7th step - Repeat.
+
+// 	let filtered_pheromones: Vec<&Vec2Key, &Pheromone> = 
 
 
 
-pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) -> () {
+
+// }
+
+
+
+pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2, pheromones: &HashMap<Vec2Key, Pheromone>) -> () {
 
 
 	let ant_mode = ant.mode;

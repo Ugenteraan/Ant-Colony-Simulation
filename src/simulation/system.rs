@@ -94,7 +94,7 @@ impl System {
  			
 
  			if let Some(ant) = world.colony.ants.get_mut(i) {
- 				move_ant(ant, &world.width, &world.height, &world.grid, &world.colony.position);
+ 				move_ant(ant, &world.width, &world.height, &world.grid, &world.colony.position, &world.pheromones);
 
  				let ant_position = ant.position;
  				world.set_cell(ant_position, Cell::Ant); //mark the cell after the move with ant.

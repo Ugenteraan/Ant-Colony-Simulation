@@ -38,3 +38,16 @@ pub fn change_direction(border: bool, blocked: bool) -> (f32, f32) {
     let angle: f32 = rand::rng().random_range(-1.0*std::f64::consts::PI/2.0..std::f64::consts::PI/2.0) as f32;
     return (angle.cos(), angle.sin());
 }
+
+pub fn calculate_distance(pos1: Vec2, pos2: Vec2) -> f32 {
+
+    return (pos2 - pos1).length();
+
+}
+
+
+
+
+
+
+

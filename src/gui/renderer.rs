@@ -20,11 +20,11 @@ fn draw_colony(ui: &mut egui::Ui, world: &World, colony_texture: &Option<egui::T
 
 	
 
-	let ui_x = world.colony.position.x * (available_size.x/world.width as f32);
-	let ui_y = world.colony.position.y * (available_size.y/world.height as f32);
+	let ui_x = world.colony.position.x * (available_size.x/world.width as f32) - 10.0;
+	let ui_y = world.colony.position.y * (available_size.y/world.height as f32) - 10.0;
 	
-	let colony_icon_size_x = available_size.x / 40.0;
-	let colony_icon_size_y = available_size.y / 40.0;
+	let colony_icon_size_x = available_size.x / 30.0;
+	let colony_icon_size_y = available_size.y / 30.0;
 
 	let ui_pos = egui::Pos2::new(ui_x, ui_y);
 

@@ -1,5 +1,6 @@
 use eframe::egui::Vec2;
 use std::sync::atomic::{AtomicU32, Ordering};
+use crate::simulation::pheromone::Pheromone;
 use crate::utils;
 
 
@@ -23,7 +24,8 @@ pub struct Ant {
 	pub mode: AntMode,
 	pub is_alive: bool,
 	pub strong_pheromone_intensity: f32, //max pheromone intensity that an ant can produce.
-	pub weak_pheromone_intensity: f32
+	pub weak_pheromone_intensity: f32,
+	pub followed_pheromones: [Option<Vec2>; 2], //array of size 2.
 }
 
 
@@ -46,7 +48,8 @@ impl Ant {
 			mode: AntMode::Exploring,
 			is_alive: true,
 			strong_pheromone_intensity: strong_pheromone_intensity,
-			weak_pheromone_intensity: weak_pheromone_intensity
+			weak_pheromone_intensity: weak_pheromone_intensity,
+			followed_pheromones: [None, None]
 		}
 	}
 

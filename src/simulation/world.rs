@@ -33,7 +33,7 @@ pub struct World {
 	pub height: usize,
 	pub width: usize,
 	pub grid: Vec<Vec<Cell>>,
-	pub colony: Colony, //code the whole colony to be spawned here tomorrow.
+	pub colony: Colony, 
 	pub foods: VecDeque<Food>,
 	pub pheromones: HashMap<Vec2Key, Pheromone>
 }
