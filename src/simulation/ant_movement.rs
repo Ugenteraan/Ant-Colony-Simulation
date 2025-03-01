@@ -83,10 +83,22 @@ fn wandering_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world
 }
 
 
-// fn returning_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) {
+fn returning_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) {
+
+	//There could be 2 reasons why an ant is returning back.
+	//1) Found food.
+	//2) Energy almost depleted.
+	//Both follows the strongest pheromone back home. But the 2nd case doesn't drop any pheromone.
+
+	//Following pheromone got a few challenges and things to look out for.
+	//1) When following the strongest pheromone, the ants should know at least the last 2 followed pheromones so it doesn't get stuck following the same one.
+	//2) Even when following the pheromones, there should be a probability rate where the ant would veer off the path.
+
+	
 
 
-// }
+
+}
 
 
 
