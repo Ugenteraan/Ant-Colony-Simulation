@@ -83,6 +83,8 @@ impl System {
  					world.set_cell(world.colony.ants[i].position, Cell::Empty); 
  				},
  				Cell::Food => {
+ 					world.colony.ants[i].visited_pheromones = [None, None, None, None, None]; //clear the visited pheromones.
+ 					world.colony.ants[i].carrying_food = true;
  					world.colony.ants[i].mode = AntMode::Returning;
  				}
  				// Cell::Ant_Pheromone => {
@@ -103,6 +105,7 @@ impl System {
  			
  			world.set_pheromone(&i); //set pheromone of the ant.
  			world.update_pheromones(self.pheromone_decay_rate);
+ 			world.colony.ants[i].update_visited_pheromone(&world.pheromones);
 
  		}
  	

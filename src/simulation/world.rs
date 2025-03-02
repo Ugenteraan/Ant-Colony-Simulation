@@ -6,7 +6,7 @@ use std::hash::{Hash, Hasher};
 use std::collections::{HashMap, VecDeque};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-pub struct Vec2Key(Vec2);
+pub struct Vec2Key(pub Vec2);
 
 // Implement Hash for Vec2Key
 impl Hash for Vec2Key {
@@ -28,7 +28,7 @@ pub enum Cell {
 	Food
 }
 
-// #[derive(Debug)]
+#[derive(Debug)]
 pub struct World {
 	pub height: usize,
 	pub width: usize,
@@ -74,7 +74,14 @@ impl World {
 	pub fn set_cell(&mut self, position: Vec2, cell: Cell) -> () {
 
 		let (x, y) = utils::world_to_grid(position);
-		self.grid[x][y] = cell;
+
+		//only set the cell if the cell is empty.
+		match self.grid[x][y] {
+			Cell::Empty => {self.grid[x][y] = cell;},
+			Cell::Ant => {self.grid[x][y] = cell;}
+			_ => {}
+		}
+
 	}
 
 	pub fn spawn_food(&mut self, food: Food) -> () {
@@ -97,6 +104,8 @@ impl World {
 
 
 		//remember, we want to limit the pheromone to 255.
+
+		//just because the ant moved in the direction of the pheromone, doesn't mean it is now on top of the pheromone. It could be on an empty cell or another pheromone cell. So we need to check if the current cell is a pheromone cell and update that to the visited pheromone.
 		if let Some(pheromone) = self.pheromones.get_mut(&pos) {
 
 			match ant.mode {

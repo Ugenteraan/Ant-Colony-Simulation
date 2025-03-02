@@ -8,11 +8,11 @@ use std::time::{Instant, Duration};
 
 const ANT_ENERGY: f32 = 50.0;
 const ANT_LIFESPAN: u32 = 500;
-const ANT_SPEED: f32 = 0.05;
-const ANT_TURN_PROBABILITY: f32 = 0.02;
-const FOOD_SPAWN_RATE: f32 = 0.0005;
+const ANT_SPEED: f32 = 0.1;
+const ANT_TURN_PROBABILITY: f32 = 0.03;
+const FOOD_SPAWN_RATE: f32 = 0.05;
 const ANT_WEAK_PHEROMONE_INTENSITY: f32 = 0.3;
-const ANT_STRONG_PHEROMONE_INTENSITY: f32 = 3.0;
+const ANT_STRONG_PHEROMONE_INTENSITY: f32 = 10.0;
 const PHEROMONE_DECAY_RATE: f32 = 0.0001;
 
 
@@ -28,7 +28,7 @@ pub struct MyApp {
 impl MyApp {
     pub fn new(world: World) -> Self {
 
-    	let system = System::new(ANT_ENERGY, ANT_LIFESPAN, ANT_SPEED, ANT_TURN_PROBABILITY, FOOD_SPAWN_RATE, ANT_WEAK_PHEROMONE_INTENSITY, ANT_STRONG_PHEROMONE_INTENSITY, PHEROMONE_DECAY_RATE); //initialize the system that governs the simulation.
+    	let system = System::new(ANT_ENERGY, ANT_LIFESPAN, ANT_SPEED, ANT_TURN_PROBABILITY, FOOD_SPAWN_RATE, ANT_STRONG_PHEROMONE_INTENSITY, ANT_WEAK_PHEROMONE_INTENSITY, PHEROMONE_DECAY_RATE); //initialize the system that governs the simulation.
 
         Self {
             world: world,

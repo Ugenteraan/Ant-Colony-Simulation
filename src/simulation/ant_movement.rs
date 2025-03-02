@@ -26,13 +26,92 @@ fn apply_new_direction(ant: &mut Ant, border: bool, blocked: bool) -> Vec2 {
 }
 
 
-fn wandering_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2) {
+fn find_strongest_pheromone<'a>(ant: &'a Ant, pheromones: &'a HashMap<Vec2Key, Pheromone>, ant_pheromone_radius: &'a f32) -> Option<&'a Pheromone> {
+
+	//collect all the nearby pheromones.
+	let filtered_pheromones: Vec<&Pheromone> = pheromones
+													.iter()
+													.filter(|(_, pheromone)| utils::calculate_distance(ant.position, pheromone.position) <             *ant_pheromone_radius)
+													.map(|(_, pheromone )| pheromone)
+													.collect(); 
+	
+
+
+	let mut strongest_pheromone: Option<&Pheromone> = None; //to keep track of the strongest one.
+	
+
+	for nearby_pheromone in filtered_pheromones {
+
+		//check if the pheromone already visited before.
+		let exists: bool = ant.visited_pheromones.iter().any(|&x| x == Some(nearby_pheromone.position));
+
+		if exists {
+			continue;
+		} else {
+
+			//update the strongest pheromone.
+			if let Some(current_strongest) = strongest_pheromone {
+
+				if current_strongest.intensity < nearby_pheromone.intensity {
+					strongest_pheromone = Some(nearby_pheromone);
+				}
+				continue;
+
+			} else{
+
+				strongest_pheromone = Some(nearby_pheromone);
+			}
+
+		}
+	}
+
+	strongest_pheromone
+
+}
+
+
+
+fn wandering_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2, returning_ant: bool, pheromones: &HashMap<Vec2Key, Pheromone>, ant_pheromone_radius: &f32) {
+
+
+
+	let strongest_pheromone: Option<&Pheromone> = find_strongest_pheromone(&ant, pheromones, ant_pheromone_radius);
+
+
+
+	if let Some(strongest_pheromone) = strongest_pheromone {
+		let direction_to_pheromone: Vec2 =  strongest_pheromone.position - ant.position;
+
+		
+		if direction_to_pheromone.length() != 0.0 {
+			if returning_ant{
+				println!("Previous direction: {:?}", ant.moving_direction);
+				let normalized_direction: Vec2 = direction_to_pheromone/direction_to_pheromone.length(); //normalizing to unit vector.
+				ant.moving_direction = normalized_direction;
+				println!("Direction changed! {:?}", normalized_direction);
+			} else{
+
+				if strongest_pheromone.intensity > 5.0 {
+					let normalized_direction: Vec2 = direction_to_pheromone/direction_to_pheromone.length(); //normalizing to unit vector.
+					ant.moving_direction = normalized_direction;
+				}
+			}
+
+		} 
+
+
+	}
+
 
 	let mut rng = rand::rng();
 
 	// generate a random direction every once in a while.
-    if rng.random::<f32>() < ant.turn_probability {
+	// the probability is lower if the ant is a returning ant.
+    if !returning_ant && rng.random::<f32>() < ant.turn_probability {
 
+    	ant.moving_direction = apply_new_direction(ant, false, false);
+
+    } else if returning_ant && rng.random::<f32>() < ant.turn_probability * 0.1{ 
     	ant.moving_direction = apply_new_direction(ant, false, false);
     }
 
@@ -89,31 +168,51 @@ fn wandering_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world
 
 
 
-// fn returning_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2, pheromones: &HashMap<Vec2Key, Pheromone>) {
+fn returning_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_grids: &Vec<Vec<Cell>>, colony_position: &Vec2, pheromones: &HashMap<Vec2Key, Pheromone>, ant_pheromone_radius: &f32) {
 
-// 	//There could be 2 reasons why an ant is returning back.
-// 	//1) Found food.
-// 	//2) Energy almost depleted.
-// 	//Both follows the strongest pheromone back home. But the 2nd case doesn't drop any pheromone.
+	//There could be 2 reasons why an ant is returning back.
+	//1) Found food.
+	//2) Energy almost depleted.
+	//Both follows the strongest pheromone back home. But the 2nd case doesn't drop any pheromone.
 
-// 	//Following pheromone got a few challenges and things to look out for.
-// 	//1) When following the strongest pheromone, the ants should know at least the last 2 followed pheromones so it doesn't get stuck following the same one.
-// 	//2) Even when following the pheromones, there should be a probability rate where the ant would veer off the path.
+	//Following pheromone got a few challenges and things to look out for.
+	//1) When following the strongest pheromone, the ants should know at least the last 2 followed pheromones so it doesn't get stuck following the same one.
+	//2) Even when following the pheromones, there should be a probability rate where the ant would veer off the path.
 
-// 	//1st step - find pheromones nearby. Iterate through all the pheromones and calc the distance.
-// 	//2nd step - Filter the ones within range and exclude the visited pheromones.
-// 	//3rd step - Pick the strongest one.
-// 	//4th step - update the ant's movement to that pheromone.
-// 	//5th step - update the visited pheromone array.
-// 	//6th step - if it's the 1st reason, drop pheromone, else do nothing.
-// 	//7th step - Repeat.
-
-// 	let filtered_pheromones: Vec<&Vec2Key, &Pheromone> = 
+	//1st step - find pheromones nearby. Iterate through all the pheromones and calc the distance.
+	//2nd step - Filter the ones within range and exclude the visited pheromones.
+	//3rd step - Pick the strongest one.
+	//4th step - update the ant's movement to that pheromone.
+	//5th step - update the visited pheromone array.
+	//6th step - if it's the 1st reason, drop pheromone, else do nothing.
+	//7th step - Repeat.
 
 
 
+	
+	let strongest_pheromone: Option<&Pheromone> = find_strongest_pheromone(&ant, pheromones, ant_pheromone_radius);
 
-// }
+
+	if let Some(strongest_pheromone) = strongest_pheromone {
+		let direction_to_pheromone: Vec2 =  ant.position - strongest_pheromone.position ;
+
+		if direction_to_pheromone.length() != 0.0 {
+			let normalized_direction: Vec2 = direction_to_pheromone/direction_to_pheromone.length(); //normalizing to unit vector.
+			ant.moving_direction = normalized_direction;
+		}
+		
+
+		wandering_ant(ant, world_width, world_height, world_grids, colony_position, true, pheromones,ant_pheromone_radius);
+
+	} else {
+
+		wandering_ant(ant, world_width, world_height, world_grids, colony_position, true, pheromones,ant_pheromone_radius);
+
+	}
+	
+	return;
+
+}
 
 
 
@@ -121,11 +220,12 @@ pub fn move_ant(ant: &mut Ant, world_width: &usize, world_height: &usize, world_
 
 
 	let ant_mode = ant.mode;
+	let ant_pheromone_radius:f32 = 3.0; //const
 
 	match ant_mode {
 
-		AntMode::Exploring => { wandering_ant(ant, world_width, world_height, world_grids, colony_position); },
-		AntMode::Returning => { }
+		AntMode::Exploring => { wandering_ant(ant, world_width, world_height, world_grids, colony_position, false, pheromones, &ant_pheromone_radius); },
+		AntMode::Returning => { wandering_ant(ant, world_width, world_height, world_grids, colony_position, true, pheromones, &ant_pheromone_radius);}
 
 	}
 

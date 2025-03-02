@@ -1,7 +1,9 @@
 use eframe::egui::Vec2;
 use std::sync::atomic::{AtomicU32, Ordering};
 use crate::simulation::pheromone::Pheromone;
+use crate::simulation::world::Vec2Key;
 use crate::utils;
+use std::collections::HashMap;
 
 
 
@@ -25,7 +27,7 @@ pub struct Ant {
 	pub is_alive: bool,
 	pub strong_pheromone_intensity: f32, //max pheromone intensity that an ant can produce.
 	pub weak_pheromone_intensity: f32,
-	pub followed_pheromones: [Option<Vec2>; 2], //array of size 2.
+	pub visited_pheromones: [Option<Vec2>; 5], //array of size 2.
 }
 
 
@@ -49,7 +51,7 @@ impl Ant {
 			is_alive: true,
 			strong_pheromone_intensity: strong_pheromone_intensity,
 			weak_pheromone_intensity: weak_pheromone_intensity,
-			followed_pheromones: [None, None]
+			visited_pheromones: [None, None, None, None, None]
 		}
 	}
 
@@ -61,19 +63,25 @@ impl Ant {
 
     }
 
-    
+    pub fn update_visited_pheromone(&mut self, pheromones: &HashMap<Vec2Key, Pheromone>) -> () {
 
-    // pub fn set_ant_position(&mut self, new_position: Vec2) -> () {
+    	let current_pheromone = pheromones.get(&Vec2Key(self.position));
 
-    // 	self.position = new_position;
-    // 	//calculate the direction to colony and set the direction to colony here.
-    // 	return;
-    // }
 
-    // pub fn set_ant_direction(&mut self, new_direction: Vec2) -> () {
+    	if let Some(current_pheromone) = current_pheromone {
+    	
+	    	if let Some(visited_pheromone) = self.visited_pheromones[0] {
 
-    // 	self.moving_direction = new_direction;
-    // }
+	    		self.visited_pheromones[1] = Some(visited_pheromone);
+	    		self.visited_pheromones[0] = Some(current_pheromone.position);
+	    	} else{
+	    		self.visited_pheromones[0] = Some(current_pheromone.position);
+	    	}
+	    }
+	    else {
+	    	return;
+	    }
+    }
 
 	
 }
