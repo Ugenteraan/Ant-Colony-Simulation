@@ -1,43 +1,39 @@
-
-mod simulation;
-mod gui;
-mod utils;
-
-
+mod resources;
+mod ui;
+mod ecs;
 
 use eframe::egui::Vec2;
-use simulation::world::World;
-use gui::app;
+use ecs::{component_storage::ComponentStorage, entity_manager::EntityManager};
+use ecs::components::{Position};
+use resources::{world::World};
+use ui::{app::MyApp};
 
 
+use eframe;
 
 
 fn main() -> Result<(), eframe::Error> {
 
-    const HEIGHT: usize = 100;
-    const WIDTH: usize = 100;
-    const COLONY_POSITION: Vec2 = Vec2::new((WIDTH / 2) as f32, (HEIGHT / 2) as f32);
-    const DEFAULT_FOOD_IN_COLONY: u32 = 20;
+    const WIDTH: usize = 600;
+    const HEIGHT: usize = 600;
+    
+    let mut entity_manager: EntityManager = EntityManager::new();
+    let ant = entity_manager.create_entity();
+    
+    let mut component_storage = ComponentStorage::new();
 
-
-    let world = World::new(WIDTH, HEIGHT, COLONY_POSITION, DEFAULT_FOOD_IN_COLONY);
-
+    component_storage.add(ant, Position(Vec2::new(1.0, 1.0))); 
+    
+    let world: World = World::new(WIDTH, HEIGHT); 
     let options = eframe::NativeOptions::default();
+    
+    
 
-    // let options = eframe::NativeOptions {
-    //     viewport: egui::ViewportBuilder::default()
-    //         .with_decorations(false) // Hide the OS-specific "chrome" around the window
-    //         .with_inner_size([WIDTH as f32, HEIGHT as f32])
-    //         .with_min_inner_size([WIDTH as f32, HEIGHT as f32])
-    //         .with_transparent(true), // To have rounded corners we need transparency
-
-    //     ..Default::default()
-    // };
 
     eframe::run_native(
         "Ant Colony Simulation",
         options,
-        Box::new(|_cc| Ok(Box::new(app::MyApp::new(world)))), 
+        Box::new(|_cc| Ok(Box::new(MyApp::new(world)))),
     )
+    
 }
-
