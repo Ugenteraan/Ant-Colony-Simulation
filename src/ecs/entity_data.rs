@@ -5,7 +5,10 @@ use crate::ecs::components::{Position, Velocity, Intensity, Direction, TurningCh
 
 use eframe::egui::Vec2;
 
-struct EntityData{
+//we're naming each entity here separately since we don't have that many entities to begin with.
+//using hashmap to store all kinds of entities in one field would work but it's slightly slower
+//performance.
+pub struct EntityData{
     pub entity_id: EntityID,
     pub ant: Option<Ant>,
     pub pheromone: Option<Pheromone>,
@@ -42,6 +45,26 @@ impl EntityData {
             ant_mode: None,
 
         }
+    }
+
+    pub fn add_ant(&mut self, ant: Ant) -> () {
+        self.ant = Some(ant);
+    }
+
+    pub fn add_pheromone(&mut self, pheromone: Pheromone) -> () {
+        self.pheromone = Some(pheromone);
+    }
+
+    pub fn add_food(&mut self, food: Food) -> () {
+        self.food = Some(food);
+    }
+    
+    pub fn add_nest(&mut self, nest: Nest) -> () {
+        self.nest = Some(nest);
+    }
+    
+    pub fn add_predator(&mut self, predator: Predator) -> () {
+        self.predator = Some(predator);
     }
 
     pub fn add_velocity(&mut self, velocity: Vec2) -> () {

@@ -1,10 +1,11 @@
 mod resources;
 mod ui;
 mod ecs;
+mod utils;
+mod simulation_setup;
 
-use eframe::egui::Vec2;
-use ecs::{component_storage::ComponentStorage, entity_manager::EntityManager};
-use ecs::components::{Position};
+
+use simulation_setup::Simulation;
 use resources::{world::World};
 use ui::{app::MyApp};
 
@@ -16,15 +17,10 @@ fn main() -> Result<(), eframe::Error> {
 
     const WIDTH: usize = 600;
     const HEIGHT: usize = 600;
-    
-    let mut entity_manager: EntityManager = EntityManager::new();
-    let ant = entity_manager.create_entity();
-    
-    let mut component_storage = ComponentStorage::new();
 
-    component_storage.add(ant, Position(Vec2::new(1.0, 1.0))); 
+    let mut simulation = Simulation::new(WIDTH, HEIGHT);
+    let world: World = simulation.get_world();
     
-    let world: World = World::new(WIDTH, HEIGHT); 
     let options = eframe::NativeOptions::default();
     
     
