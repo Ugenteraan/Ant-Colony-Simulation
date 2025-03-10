@@ -3,7 +3,7 @@
 use std::sync::atomic::{AtomicU32, Ordering};
 
 #[derive(PartialEq, Eq, Debug, Clone, Hash, Copy)]
-pub struct Entity(u32);
+pub struct EntityID(u32);
 
 pub struct EntityManager {
     next_id : AtomicU32,
@@ -16,10 +16,10 @@ impl EntityManager {
         Self {next_id: AtomicU32::new(0)}
     }
 
-    pub fn create_entity(&mut self) -> Entity {
+    pub fn create_entity(&mut self) -> EntityID {
     
         let new_id: u32 = self.next_id.fetch_add(1, Ordering::Relaxed);
-        Entity(new_id)
+        EntityID(new_id)
     }
 }
 

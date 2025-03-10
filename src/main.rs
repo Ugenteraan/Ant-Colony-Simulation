@@ -28,8 +28,6 @@ fn main() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions::default();
     
     
-
-
     eframe::run_native(
         "Ant Colony Simulation",
         options,
