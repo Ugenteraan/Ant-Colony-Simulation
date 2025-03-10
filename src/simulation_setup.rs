@@ -11,8 +11,8 @@ use crate::resources::world::{World, Cell};
 
 use eframe::egui::Vec2;
 
-pub struct Simulation {
-    world: World,
+pub struct Simulation<'a>{
+    world: &'a mut World,
     entity_manager: EntityManager,
     entity_component_storage: EntityComponentStorage,
 
@@ -20,20 +20,17 @@ pub struct Simulation {
 
 
 
-impl Simulation {
+impl<'a> Simulation<'a>{
     
-    pub fn new(world_width: usize, world_height: usize) -> Self {
+    pub fn new(world: &'a mut World) -> Self {
         
         Simulation {
-            world: World::new(world_width, world_height),
+            world: world,
             entity_manager: EntityManager::new(),
             entity_component_storage: EntityComponentStorage::new(),
         }
     }
 
-    pub fn get_world(&mut self) -> World {
-        self.world.clone()
-    }
 
     pub fn initialize_entities(&mut self) -> () {
         
@@ -42,6 +39,8 @@ impl Simulation {
         let mut nest = EntityData::new(self.entity_manager.create_entity(), nest_position);
         nest.add_nest(Nest {});
     }
+
+    
 
 
         

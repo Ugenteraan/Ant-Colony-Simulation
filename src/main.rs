@@ -18,8 +18,9 @@ fn main() -> Result<(), eframe::Error> {
     const WIDTH: usize = 600;
     const HEIGHT: usize = 600;
 
-    let mut simulation = Simulation::new(WIDTH, HEIGHT);
-    let world: World = simulation.get_world();
+    let mut world: World = World::new(WIDTH, HEIGHT);
+
+    let simulation = Simulation::new(&mut world);
     
     let options = eframe::NativeOptions::default();
     
