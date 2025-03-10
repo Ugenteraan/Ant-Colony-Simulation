@@ -8,6 +8,7 @@ use eframe::egui::Vec2;
 //we're naming each entity here separately since we don't have that many entities to begin with.
 //using hashmap to store all kinds of entities in one field would work but it's slightly slower
 //performance.
+#[derive(Debug, Copy, Clone)]
 pub struct EntityData{
     pub entity_id: EntityID,
     pub ant: Option<Ant>,

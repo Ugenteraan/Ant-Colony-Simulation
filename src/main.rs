@@ -20,7 +20,9 @@ fn main() -> Result<(), eframe::Error> {
 
     let mut world: World = World::new(WIDTH, HEIGHT);
 
-    let simulation = Simulation::new(&mut world);
+    let mut simulation = Simulation::new(&mut world);
+    simulation.initialize_entities();
+    simulation.update_world();
     
     let options = eframe::NativeOptions::default();
     
