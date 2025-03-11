@@ -1,7 +1,8 @@
-
-use crate::ecs::entity_manager::{EntityManager, EntityID};
-use crate::ecs::entities::{Ant, Pheromone, Food, Nest, Predator};
-use crate::ecs::components::{Position, Velocity, Intensity, Direction, TurningChance, Capacity, AntMode};
+use crate::ecs::components::{
+    AntMode, Capacity, Direction, Intensity, Position, TurningChance, Velocity,
+};
+use crate::ecs::entities::{Ant, Food, Nest, Pheromone, Predator};
+use crate::ecs::entity_manager::{EntityID, EntityManager};
 
 use eframe::egui::Vec2;
 
@@ -9,7 +10,7 @@ use eframe::egui::Vec2;
 //using hashmap to store all kinds of entities in one field would work but it's slightly slower
 //performance.
 #[derive(Debug, Copy, Clone)]
-pub struct EntityData{
+pub struct EntityData {
     pub entity_id: EntityID,
     pub ant: Option<Ant>,
     pub pheromone: Option<Pheromone>,
@@ -25,11 +26,8 @@ pub struct EntityData{
     pub ant_mode: Option<AntMode>,
 }
 
-
 impl EntityData {
-    
     pub fn new(entity_id: EntityID, position: Vec2) -> Self {
-        
         EntityData {
             entity_id: entity_id,
             ant: None,
@@ -44,7 +42,6 @@ impl EntityData {
             turning_chance: None,
             capacity: None,
             ant_mode: None,
-
         }
     }
 
@@ -59,11 +56,11 @@ impl EntityData {
     pub fn add_food(&mut self, food: Food) -> () {
         self.food = Some(food);
     }
-    
+
     pub fn add_nest(&mut self, nest: Nest) -> () {
         self.nest = Some(nest);
     }
-    
+
     pub fn add_predator(&mut self, predator: Predator) -> () {
         self.predator = Some(predator);
     }
@@ -91,7 +88,4 @@ impl EntityData {
     pub fn add_ant_mode(&mut self, ant_mode: AntMode) -> () {
         self.ant_mode = Some(ant_mode);
     }
-
 }
-
-

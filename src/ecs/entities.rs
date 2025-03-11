@@ -14,5 +14,3 @@ pub struct Pheromone {}
 
 #[derive(Debug, Clone, Copy)]
 pub struct Predator {}
-
-

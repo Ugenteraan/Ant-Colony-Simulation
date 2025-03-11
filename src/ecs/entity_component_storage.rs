@@ -1,17 +1,15 @@
 //Storage to store all the entities here.
 use crate::ecs::entity_data::EntityData;
 
-
 #[derive(Debug, Clone)]
 pub struct EntityComponentStorage {
     pub entity_data: Vec<EntityData>,
 }
 
 impl EntityComponentStorage {
-    
     pub fn new() -> Self {
         EntityComponentStorage {
-            entity_data: Vec::new() 
+            entity_data: Vec::new(),
         }
     }
 
