@@ -11,13 +11,14 @@ use ui::app::MyApp;
 use eframe;
 
 fn main() -> Result<(), eframe::Error> {
-    const WIDTH: usize = 600;
-    const HEIGHT: usize = 600;
+    const WIDTH: usize = 100;
+    const HEIGHT: usize = 100;
 
     let mut world: World = World::new(WIDTH, HEIGHT);
 
     let mut simulation = Simulation::new(&mut world);
     simulation.initialize_entities();
+    simulation.run_system();
     simulation.update_world();
 
     let options = eframe::NativeOptions::default();
