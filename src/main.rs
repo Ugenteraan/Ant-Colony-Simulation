@@ -1,3 +1,4 @@
+mod config;
 mod ecs;
 mod resources;
 mod simulation_setup;
@@ -8,11 +9,9 @@ use resources::world::World;
 use simulation_setup::Simulation;
 use ui::app::MyApp;
 
-use eframe;
-
 fn main() -> Result<(), eframe::Error> {
-    const WIDTH: usize = 100;
-    const HEIGHT: usize = 100;
+    const WIDTH: usize = config::WORLD_WIDTH;
+    const HEIGHT: usize = config::WORLD_HEIGHT;
 
     let mut world: World = World::new(WIDTH, HEIGHT);
 
