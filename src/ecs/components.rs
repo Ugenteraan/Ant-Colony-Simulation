@@ -5,8 +5,8 @@ use eframe::egui::Vec2;
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Position(pub Vec2);
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Velocity(pub Vec2);
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Velocity(pub f32);
 
 //can be used to represent pheromone's intensity.
 #[derive(Debug, Clone, Copy, PartialEq)]

@@ -16,7 +16,7 @@ use eframe::egui::Vec2;
 
 pub struct Simulation {
     entity_manager: EntityManager,
-    pub entity_component_storage: EntityComponentStorage,
+    entity_component_storage: EntityComponentStorage,
 }
 
 impl Simulation {
@@ -42,8 +42,8 @@ impl Simulation {
         self.entity_component_storage.add_entity(nest);
 
         //initialize a number of ants in the beginning.
-        for _idx_ant in 0..10 {
-            let velocity: f32 = 0.1; //set ant speed here.
+        for _idx_ant in 0..1 {
+            let velocity: Vec2 = Vec2::new(0.1, 0.1); //set ant speed here.
             let random_direction: Vec2 = utils::gen_rand_direction();
             let turning_chance: f32 = 0.001; //set turning chance here.
 
@@ -59,8 +59,6 @@ impl Simulation {
     }
 
     pub fn update_world(&mut self, world: &mut World) {
-        world.grid = vec![vec![Cell::Empty; world.width]; world.height];
-
         for entity_component in self.entity_component_storage.entity_data.iter() {
             //update the nest.
             if entity_component.nest.is_some() {
@@ -74,7 +72,7 @@ impl Simulation {
         }
     }
 
-    pub fn run_system(&mut self) {
-        system::system(&mut self.entity_component_storage);
+    pub fn run_system(&mut self, world: &mut World) {
+        system::system(&mut self.entity_component_storage, world);
     }
 }

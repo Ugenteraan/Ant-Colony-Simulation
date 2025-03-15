@@ -1,21 +1,27 @@
-use crate::resources::world::{Cell, World};
+use crate::resources::world::{self, Cell, World};
+use crate::simulation_setup::Simulation;
 use crate::ui::renderer;
 use eframe::egui;
 use image::ImageReader;
 use std::io::Cursor;
+use std::time::{Duration, Instant};
 
 pub struct MyApp {
     world: World,
+    simulation_system: Simulation,
     nest_texture: Option<egui::TextureHandle>,
     ant_texture: Option<egui::TextureHandle>,
+    last_update: Instant,
 }
 
 impl MyApp {
-    pub fn new(world: World) -> Self {
-        Self {
-            world: world,
+    pub fn new(world: World, simulation_system: Simulation) -> Self {
+        MyApp {
+            world,
+            simulation_system,
             nest_texture: None,
             ant_texture: None,
+            last_update: Instant::now(),
         }
     }
 
@@ -64,6 +70,10 @@ impl MyApp {
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        let now = Instant::now();
+        let elapsed = now - self.last_update;
+
+        ctx.request_repaint();
         self.load_nest_texture(ctx);
         self.load_ant_texture(ctx);
 
@@ -73,30 +83,72 @@ impl eframe::App for MyApp {
             let available_size = ui.available_size();
             let (response, painter) = ui.allocate_painter(available_size, egui::Sense::hover());
 
-            for (y, row) in self.world.grid.iter().enumerate() {
-                for (x, cell) in row.iter().enumerate() {
-                    match cell {
-                        Cell::Nest => renderer::draw_nest(
-                            ui,
-                            &self.world,
-                            x,
-                            y,
-                            &self.nest_texture,
-                            &available_size,
-                            &painter,
-                        ),
-                        Cell::Ant => renderer::draw_ant(
-                            ui,
-                            &self.world,
-                            x,
-                            y,
-                            &self.ant_texture,
-                            &available_size,
-                            &painter,
-                        ),
-                        _ => {}
-                    }
+            for entity_data in self
+                .simulation_system
+                .entity_component_storage
+                .entity_data
+                .iter()
+            {
+                if entity_data.nest.is_some() {
+                    let x = entity_data.position.0.x;
+                    let y = entity_data.position.0.y;
+
+                    renderer::draw_nest(
+                        ui,
+                        &self.world,
+                        x,
+                        y,
+                        &self.nest_texture,
+                        &available_size,
+                        &painter,
+                    );
                 }
+
+                if entity_data.ant.is_some() {
+                    let x = entity_data.position.0.x;
+                    let y = entity_data.position.0.y;
+
+                    renderer::draw_ant(
+                        ui,
+                        &self.world,
+                        x,
+                        y,
+                        &self.ant_texture,
+                        &available_size,
+                        &painter,
+                    );
+                }
+            }
+            //for (y, row) in self.world.grid.iter().enumerate() {
+            //    for (x, cell) in row.iter().enumerate() {
+            //        match cell {
+            //            Cell::Nest => renderer::draw_nest(
+            //                ui,
+            //                &self.world,
+            //                x,
+            //                y,
+            //                &self.nest_texture,
+            //                &available_size,
+            //                &painter,
+            //            ),
+            //            Cell::Ant => renderer::draw_ant(
+            //                ui,
+            //                &self.world,
+            //                x,
+            //                y,
+            //                &self.ant_texture,
+            //                &available_size,
+            //                &painter,
+            //            ),
+            //            _ => {}
+            //        }
+            //    }
+            //}
+
+            if elapsed > Duration::from_millis(16) {
+                self.simulation_system.run_system();
+                self.simulation_system.update_world(&mut self.world);
+                self.last_update = now;
             }
         });
     }

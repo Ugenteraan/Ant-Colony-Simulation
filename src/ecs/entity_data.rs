@@ -45,47 +45,47 @@ impl EntityData {
         }
     }
 
-    pub fn add_ant(&mut self, ant: Ant) -> () {
+    pub fn add_ant(&mut self, ant: Ant) {
         self.ant = Some(ant);
     }
 
-    pub fn add_pheromone(&mut self, pheromone: Pheromone) -> () {
+    pub fn add_pheromone(&mut self, pheromone: Pheromone) {
         self.pheromone = Some(pheromone);
     }
 
-    pub fn add_food(&mut self, food: Food) -> () {
+    pub fn add_food(&mut self, food: Food) {
         self.food = Some(food);
     }
 
-    pub fn add_nest(&mut self, nest: Nest) -> () {
+    pub fn add_nest(&mut self, nest: Nest) {
         self.nest = Some(nest);
     }
 
-    pub fn add_predator(&mut self, predator: Predator) -> () {
+    pub fn add_predator(&mut self, predator: Predator) {
         self.predator = Some(predator);
     }
 
-    pub fn add_velocity(&mut self, velocity: Vec2) -> () {
+    pub fn add_velocity(&mut self, velocity: f32) {
         self.velocity = Some(Velocity(velocity));
     }
 
-    pub fn add_intensity(&mut self, intensity: f32) -> () {
+    pub fn add_intensity(&mut self, intensity: f32) {
         self.intensity = Some(Intensity(intensity));
     }
 
-    pub fn add_direction(&mut self, direction: Vec2) -> () {
+    pub fn add_direction(&mut self, direction: Vec2) {
         self.direction = Some(Direction(direction));
     }
 
-    pub fn add_turning_chance(&mut self, turning_chance: f32) -> () {
+    pub fn add_turning_chance(&mut self, turning_chance: f32) {
         self.turning_chance = Some(TurningChance(turning_chance));
     }
 
-    pub fn add_capacity(&mut self, capacity: f32) -> () {
+    pub fn add_capacity(&mut self, capacity: f32) {
         self.capacity = Some(Capacity(capacity));
     }
 
-    pub fn add_ant_mode(&mut self, ant_mode: AntMode) -> () {
+    pub fn add_ant_mode(&mut self, ant_mode: AntMode) {
         self.ant_mode = Some(ant_mode);
     }
 }
